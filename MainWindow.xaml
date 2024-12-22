@@ -1,0 +1,60 @@
+﻿<Window x:Class="Monitoring.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Моніторинг" Height="450" Width="600">
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="RoundedButtonStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#FFB7FFBA">
+        <Button Content="Налаштування" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="20,12,0,0" Width="120" Click="SettingsButton_Click" 
+                Style="{StaticResource RoundedButtonStyle}" Background="#FF65C3E2" Height="27" />
+        <Button Content="Про програму" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="20,384,0,0" Width="106" Click="Button_Click" 
+                Style="{StaticResource RoundedButtonStyle}" Background="#FFB7E4F3" Height="25" FontSize="12" />
+        <Button Content="Оновити" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Height="25" 
+                Click="RefreshButton_Click" Margin="484,14,0,0"
+                Style="{StaticResource RoundedButtonStyle}" Background="#FF65C3E2" />
+        <Border Margin="20,45,20,37" CornerRadius="5" BorderBrush="#FF797979" BorderThickness="1" Background="#FFE6FFF4">
+            <ListView Name="DataListView" SelectionChanged="DataListView_SelectionChanged" Background="#FFE6FFF4" Margin="0,5,2,12" BorderBrush="#FFE6FFF4">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="Кімната" Width="100" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Тип" Width="100" DisplayMemberBinding="{Binding Type}" />
+                        <GridViewColumn Header="Значення" Width="100" DisplayMemberBinding="{Binding Value}" />
+                        <GridViewColumn Header="Статус" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Status}" Foreground="{Binding StatusColor}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+    </Grid>
+</Window>
