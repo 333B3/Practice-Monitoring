@@ -13,9 +13,12 @@ namespace Monitoring
     public partial class MainWindow : Window
     {
         private readonly string[] ServerUrls = { "http://temperature2.local/", "http://temperature1.local/" };
-        private int temperatureThreshold = 30;
-        private int updateInterval = 10;
+        private int temperatureThreshold = 40;
+        private int updateInterval = 5;
         private DispatcherTimer _timer;
+        private int _sensorIdCounter = 1;
+        private readonly Dictionary<string, SensorData> _sensorCache = new Dictionary<string, SensorData>();
+
 
         private readonly Dictionary<string, string> RoomTranslations = new Dictionary<string, string>
         {
@@ -77,7 +80,7 @@ namespace Monitoring
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        
             }
         }
         private List<SensorData> ParseJson(string json)
@@ -116,15 +119,22 @@ namespace Monitoring
                         {
                             sensorType = RoomTranslations[sensorType.ToLower()];
                         }
+                        string sensorKey = $"{name}_{sensorType}";
 
-                        var sensorData = new SensorData
+                        if (!_sensorCache.ContainsKey(sensorKey))
                         {
-                            Id = result.Count + 1,
-                            Name = name,
-                            Type = sensorType,
-                            Value = valueProp.GetDouble()
-                        };
-                        result.Add(sensorData);
+                            var newSensor = new SensorData
+                            {
+                                Id = _sensorCache.Count + 1, 
+                                Name = name,
+                                Type = sensorType,
+                                Value = valueProp.GetDouble()
+                            };
+                            _sensorCache[sensorKey] = newSensor;
+                        }
+                        var existingSensor = _sensorCache[sensorKey];
+                        existingSensor.Value = valueProp.GetDouble(); 
+                        result.Add(existingSensor);
                     }
                 }
 
@@ -136,6 +146,8 @@ namespace Monitoring
                 return new List<SensorData>();
             }
         }
+
+
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {

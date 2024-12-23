@@ -18,7 +18,7 @@ namespace Monitoring
             this.Top = 200; 
             this.Left = 60; 
 
-            RoomNameTextBlock.Text = $"Room: {roomName}";
+            RoomNameTextBlock.Text = $"Кінмата: {roomName}";
             _sensors = new ObservableCollection<SensorData>(sensors);
 
             foreach (var sensor in _sensors)
